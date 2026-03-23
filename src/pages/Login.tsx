@@ -8,13 +8,11 @@ import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 
 const loginSchema = z.object({
-  nit: z.string().trim().min(1, "El NIT es requerido").max(20),
   email: z.string().trim().email("Correo electrónico inválido").max(255),
   password: z.string().min(6, "Mínimo 6 caracteres").max(128),
 });
 
 export default function Login() {
-  const [nit, setNit] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -26,7 +24,7 @@ export default function Login() {
     e.preventDefault();
     setErrors({});
 
-    const result = loginSchema.safeParse({ nit, email, password });
+    const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       result.error.errors.forEach((err) => {
@@ -72,19 +70,7 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="nit" className="text-xs text-muted-foreground">NIT de la empresa</Label>
-              <Input
-                id="nit"
-                placeholder="900.123.456-7"
-                value={nit}
-                onChange={(e) => setNit(e.target.value)}
-                maxLength={20}
-              />
-              {errors.nit && <p className="text-xs text-destructive">{errors.nit}</p>}
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-xs text-muted-foreground">Correo RUT</Label>
+              <Label htmlFor="email" className="text-xs text-muted-foreground">Correo electrónico</Label>
               <Input
                 id="email"
                 type="email"

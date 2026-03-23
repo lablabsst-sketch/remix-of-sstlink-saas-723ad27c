@@ -11,8 +11,12 @@ import { z } from "zod";
 
 const STEPS = ["Empresa", "Administrador", "Detalles SST", "Confirmación"];
 
+const nitRegex = /^[0-9-]+$/;
+
 const step1Schema = z.object({
-  nit: z.string().trim().min(1, "El NIT es requerido").max(20),
+  nit: z.string().trim().min(1, "El NIT es requerido").max(20)
+    .refine((val) => nitRegex.test(val), "Solo se permiten números y guiones (sin puntos)")
+    .refine((val) => /\d/.test(val), "Debe contener al menos un número"),
   nombre: z.string().trim().min(1, "La razón social es requerida").max(200),
   sector: z.string().trim().min(1, "El sector es requerido").max(100),
 });
@@ -90,51 +94,23 @@ export default function Register() {
   const handleFinish = async () => {
     setLoading(true);
     try {
-      // 1. Create auth user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      // All empresa + profile + role creation handled by handle_new_user trigger
+      const { error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: window.location.origin,
-          data: { nombre: fullName },
+          data: {
+            nombre: fullName,
+            empresa_nombre: nombre,
+            empresa_nit: nit,
+            empresa_sector: sector,
+            empresa_num_empleados: String(parseInt(numEmpleados) || 0),
+            empresa_tiene_contratistas: String(tieneContratistas),
+          },
         },
       });
       if (authError) throw authError;
-
-      const userId = authData.user?.id;
-      if (!userId) throw new Error("No se pudo crear el usuario");
-
-      // 2. Create empresa
-      const { data: empresa, error: empresaError } = await supabase
-        .from("empresas")
-        .insert({
-          nit,
-          nombre,
-          sector_industria: sector,
-          num_empleados_directos: parseInt(numEmpleados) || 0,
-          tiene_contratistas: tieneContratistas,
-        })
-        .select("id")
-        .single();
-      if (empresaError) throw empresaError;
-
-      // 3. Link user profile to empresa and set admin role
-      const { error: profileError } = await supabase
-        .from("usuarios")
-        .update({
-          empresa_id: empresa.id,
-          nombre: fullName.split(" ")[0],
-          apellido: fullName.split(" ").slice(1).join(" ") || null,
-        })
-        .eq("user_id", userId);
-      if (profileError) throw profileError;
-
-      // 4. Set admin role
-      const { error: roleError } = await supabase
-        .from("user_roles")
-        .update({ role: "administrador" })
-        .eq("user_id", userId);
-      if (roleError) throw roleError;
 
       setSuccess(true);
     } catch (err: any) {
@@ -190,11 +166,17 @@ export default function Register() {
               <div className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">NIT</Label>
                 <Input
-                  placeholder="900.123.456-7"
+                  placeholder="900123456-7"
                   value={nit}
-                  onChange={(e) => setNit(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\./g, "");
+                    setNit(val);
+                  }}
                   maxLength={20}
                 />
+                <p className="text-[10px] text-muted-foreground/70">
+                  Ingresa el NIT sin puntos y con el dígito de verificación (Ej: 900123456-7)
+                </p>
                 {errors.nit && <p className="text-xs text-destructive">{errors.nit}</p>}
               </div>
               <div className="space-y-1.5">
