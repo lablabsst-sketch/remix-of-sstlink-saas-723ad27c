@@ -56,6 +56,59 @@ export type Database = {
         }
         Relationships: []
       }
+      trabajadores: {
+        Row: {
+          apellidos: string
+          cargo: string | null
+          created_at: string
+          email: string | null
+          empresa_id: string
+          estado: string
+          fecha_ingreso: string
+          id: string
+          nombres: string
+          numero_documento: string
+          tipo_documento: string
+          updated_at: string
+        }
+        Insert: {
+          apellidos: string
+          cargo?: string | null
+          created_at?: string
+          email?: string | null
+          empresa_id: string
+          estado?: string
+          fecha_ingreso?: string
+          id?: string
+          nombres: string
+          numero_documento: string
+          tipo_documento?: string
+          updated_at?: string
+        }
+        Update: {
+          apellidos?: string
+          cargo?: string | null
+          created_at?: string
+          email?: string | null
+          empresa_id?: string
+          estado?: string
+          fecha_ingreso?: string
+          id?: string
+          nombres?: string
+          numero_documento?: string
+          tipo_documento?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trabajadores_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
