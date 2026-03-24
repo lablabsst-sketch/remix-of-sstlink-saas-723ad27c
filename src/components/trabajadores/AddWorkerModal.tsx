@@ -65,9 +65,10 @@ export function AddWorkerModal({ open, onOpenChange, empresaId, onSuccess }: Add
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" aria-describedby="add-worker-desc">
         <DialogHeader>
           <DialogTitle className="text-base font-medium">Añadir Trabajador</DialogTitle>
+          <p id="add-worker-desc" className="text-xs text-muted-foreground">Completa los datos del nuevo trabajador.</p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
