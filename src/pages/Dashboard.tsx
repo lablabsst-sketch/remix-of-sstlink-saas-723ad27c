@@ -4,71 +4,41 @@ import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import { DashboardMetrics } from "@/components/dashboard/DashboardMetrics";
 import { DashboardPanels } from "@/components/dashboard/DashboardPanels";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 export default function Dashboard() {
-  const { usuario, empresa, user, loading, authError } = useAuth();
-  const { toast } = useToast();
+  const { usuario, empresa, loading: authLoading } = useAuth();
+  const { data, loading: dataLoading } = useDashboardData(empresa?.id);
   const [entered, setEntered] = useState(false);
+  const loading = authLoading || dataLoading;
 
   useEffect(() => {
-    if (!loading) {
-      requestAnimationFrame(() => setEntered(true));
-    }
+    if (!loading) requestAnimationFrame(() => setEntered(true));
   }, [loading]);
 
-  useEffect(() => {
-    if (!user?.id) {
-      console.log("Dashboard: waiting for user context...");
-      return;
-    }
-
-    if (!loading && authError) {
-      toast({
-        title: "Error al cargar los datos",
-        description: authError,
-        variant: "destructive",
-      });
-    }
-  }, [loading, authError, user?.id]);
-
-  const currentMonth = new Date().toLocaleDateString("es-CO", { month: "long", year: "numeric" });
-  const currentMonthUpper = new Date().toLocaleDateString("es-CO", { month: "short", year: "numeric" }).toUpperCase();
-
-  const nombreCompleto = usuario
-    ? `${usuario.nombre}${usuario.apellido ? " " + usuario.apellido : ""}`
-    : null;
+  const mesAnio = new Date().toLocaleDateString("es-CO", { month: "short", year: "numeric" }).toUpperCase();
+  const nombreCompleto = usuario ? `${usuario.nombre}${usuario.apellido ? " " + usuario.apellido : ""}` : "Usuario";
 
   return (
     <AppLayout breadcrumbs={["SSTLink", "Inicio"]}>
-      <div
-        className="space-y-3.5 max-w-6xl transition-all duration-300"
-        style={{
-          opacity: entered ? 1 : 0,
-          transform: entered ? "translateY(0)" : "translateY(8px)",
-        }}
-      >
-        {/* Hero */}
+      <div className="space-y-3.5 max-w-6xl transition-all duration-300"
+        style={{ opacity: entered ? 1 : 0, transform: entered ? "translateY(0)" : "translateY(8px)" }}>
         {loading ? (
           <Skeleton className="h-[140px] w-full rounded-[14px]" />
         ) : (
           <DashboardHero
             empresaNombre={empresa?.nombre ?? "Sin empresa"}
-            nombreCompleto={nombreCompleto ?? "Usuario"}
-            numTrabajadores={empresa?.num_empleados_directos ?? 0}
-            nivelProteccion={84}
-            accidentes={0}
-            mesAnio={currentMonthUpper}
-            mesLabel={currentMonth}
+            nombreCompleto={nombreCompleto}
+            numTrabajadores={data.totalTrabajadores}
+            nivelProteccion={data.nivelProteccion}
+            accidentes={data.accidentesAnio}
+            mesAnio={mesAnio}
+            mesLabel={mesAnio}
           />
         )}
-
-        {/* Metrics */}
-        <DashboardMetrics loading={loading} empresa={empresa} />
-
-        {/* Two-column panels */}
-        <DashboardPanels loading={loading} />
+        <DashboardMetrics loading={loading} data={data} />
+        <DashboardPanels loading={loading} data={data} />
       </div>
     </AppLayout>
   );
