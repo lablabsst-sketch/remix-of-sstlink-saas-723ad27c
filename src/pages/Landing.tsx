@@ -6,6 +6,7 @@ import {
   ChevronRight, Mail, MapPin, Phone
 } from "lucide-react";
 import { useScrollFadeIn } from "@/hooks/useScrollFadeIn";
+import logoSstlink from "@/assets/logo-sstlink.png";
 
 const fadeClass = (visible: boolean) =>
   `transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`;
@@ -17,10 +18,7 @@ function LandingNav() {
       <div className="max-w-6xl mx-auto flex items-center justify-between h-14 px-4 md:px-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">S</span>
-          </div>
-          <span className="font-semibold text-foreground text-base">SSTLink</span>
+          <img src={logoSstlink} alt="SSTLink" className="h-8 w-auto" />
         </Link>
 
         {/* Desktop links */}
@@ -300,10 +298,7 @@ function Footer() {
         {/* Brand */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xs">S</span>
-            </div>
-            <span className="font-semibold text-white text-sm">SSTLink</span>
+            <img src={logoSstlink} alt="SSTLink" className="h-7 w-auto brightness-0 invert" />
           </div>
           <p className="text-xs text-white/50 leading-relaxed">
             Plataforma líder para la gestión del Sistema de Seguridad y Salud en el Trabajo (SG-SST) en Colombia.
