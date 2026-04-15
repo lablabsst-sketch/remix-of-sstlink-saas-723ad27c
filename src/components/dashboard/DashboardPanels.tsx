@@ -1,6 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertTriangle, BookOpen, CheckCircle2, Users } from "lucide-react";
+import { AlertTriangle, BookOpen, CheckCircle2, Users, ShieldCheck } from "lucide-react";
 import { DashboardData } from "@/hooks/useDashboardData";
+import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
@@ -68,7 +69,31 @@ export function DashboardPanels({ loading, data }: Props) {
       <div className="bg-surface rounded-xl border-[0.5px] border-border p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-[13px] font-medium">Estado SST</h3>
+          <button onClick={() => navigate("/sgsst")} className="text-[11px] text-primary hover:underline">Ver SG-SST →</button>
         </div>
+
+        {/* PHVA mini breakdown */}
+        {data.cumplimientoPhva && data.cumplimientoPhva.fases.length > 0 && (
+          <div className="mb-3 space-y-1.5">
+            {[
+              { key: "PLANEAR", color: "#3B82F6" },
+              { key: "HACER", color: "#F59E0B" },
+              { key: "VERIFICAR", color: "#8B5CF6" },
+              { key: "ACTUAR", color: "#22C55E" },
+            ].map(f => {
+              const fase = data.cumplimientoPhva!.fases.find(x => x.fase === f.key);
+              if (!fase) return null;
+              return (
+                <div key={f.key} className="flex items-center gap-2">
+                  <span className="text-[10px] w-16 text-muted-foreground">{f.key}</span>
+                  <Progress value={fase.porcentaje} className="h-1 flex-1" style={{ "--progress-color": f.color } as React.CSSProperties} />
+                  <span className="text-[10px] font-medium w-8 text-right">{fase.porcentaje}%</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <div className="space-y-0.5">
           <StatusRow icon={BookOpen} label="Capacitaciones pendientes" value={data.capacitacionesPendientes} okText="Al día ✓" alertColor="#F59E0B" onClick={() => navigate("/capacitaciones")} />
           <StatusRow icon={AlertTriangle} label="Docs próximos a vencer" value={data.docsProximosVencer} okText="Sin alertas ✓" alertColor="#EF4444" onClick={() => navigate("/documentos")} />
