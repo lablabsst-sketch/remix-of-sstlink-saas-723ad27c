@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, Users, Truck, GraduationCap,
   ClipboardCheck, BarChart3, FileText, CalendarRange,
-  Building2, MessageCircle, UserCheck
+  Building2, MessageCircle, UserCheck, ShieldCheck
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -10,7 +10,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import logoSstlink from "@/assets/logo-sstlink.png";
 
 const mainItems = [
-  { title: "Inicio", url: "/", icon: LayoutDashboard },
+  { title: "Inicio", url: "/dashboard", icon: LayoutDashboard },
+  { title: "SG-SST", url: "/sgsst", icon: ShieldCheck },
   { title: "Trabajadores", url: "/trabajadores", icon: Users },
   { title: "Clientes", url: "/clientes", icon: UserCheck },
   { title: "Proveedores", url: "/proveedores", icon: Truck, badge: true },

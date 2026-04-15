@@ -9,6 +9,7 @@ import Landing from "./pages/Landing.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import SGSST from "./pages/SGSST.tsx";
 import Trabajadores from "./pages/Trabajadores.tsx";
 import TrabajadorDetail from "./pages/TrabajadorDetail.tsx";
 import Clientes from "./pages/Clientes.tsx";
@@ -34,6 +35,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sgsst"
+              element={
+                <ProtectedRoute>
+                  <SGSST />
                 </ProtectedRoute>
               }
             />
