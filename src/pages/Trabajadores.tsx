@@ -87,6 +87,10 @@ export default function Trabajadores() {
     setWorkers(prev => prev.map(w => w.id === id ? { ...w, estado: newEstado } : w));
   };
 
+  const handleVerificadoUpdate = (id: string, verificado: boolean, verificadoEn: string | null) => {
+    setWorkers(prev => prev.map(w => w.id === id ? { ...w, verificado_ingreso: verificado, verificado_en: verificadoEn } : w));
+  };
+
   const filtered = workers.filter((w) => {
     const matchSearch =
       search === "" ||
