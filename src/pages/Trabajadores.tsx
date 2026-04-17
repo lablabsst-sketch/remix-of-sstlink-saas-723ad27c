@@ -52,9 +52,9 @@ export default function Trabajadores() {
   const fetchWorkers = useCallback(async () => {
     if (!empresa?.id) return;
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("trabajadores")
-      .select("id, nombres, apellidos, tipo_documento, numero_documento, cargo, email, estado, fecha_ingreso")
+      .select("id, nombres, apellidos, tipo_documento, numero_documento, cargo, email, estado, fecha_ingreso, verificado_ingreso, verificado_en")
       .eq("empresa_id", empresa.id)
       .order("created_at", { ascending: false });
 
