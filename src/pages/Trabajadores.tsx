@@ -226,6 +226,14 @@ export default function Trabajadores() {
                       <td className="px-4 py-3">
                         <EstadoChip workerId={w.id} estado={w.estado} editable={true} onUpdate={handleEstadoUpdate} />
                       </td>
+                      <td className="px-4 py-3 text-center">
+                        <VerificadoToggle
+                          workerId={w.id}
+                          verificado={!!w.verificado_ingreso}
+                          verificadoEn={w.verificado_en}
+                          onUpdate={handleVerificadoUpdate}
+                        />
+                      </td>
                       <td className="px-4 py-3 text-right">
                         <Link
                           to={`/trabajadores/${w.id}`}
