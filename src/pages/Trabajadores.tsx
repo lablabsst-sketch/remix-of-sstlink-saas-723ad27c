@@ -194,6 +194,7 @@ export default function Trabajadores() {
                     <th className="text-left px-4 py-3 font-medium text-muted-foreground uppercase tracking-wide text-[10px]">Cargo</th>
                     <th className="text-left px-4 py-3 font-medium text-muted-foreground uppercase tracking-wide text-[10px]">Fecha Ingreso</th>
                     <th className="text-left px-4 py-3 font-medium text-muted-foreground uppercase tracking-wide text-[10px]">Estado</th>
+                    <th className="text-center px-4 py-3 font-medium text-muted-foreground uppercase tracking-wide text-[10px]">Verificado</th>
                     <th className="text-right px-4 py-3 font-medium text-muted-foreground uppercase tracking-wide text-[10px]">Acciones</th>
                   </tr>
                 </thead>
