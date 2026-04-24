@@ -1240,6 +1240,45 @@ export type Database = {
           },
         ]
       }
+      sync_log: {
+        Row: {
+          created_at: string
+          direccion: string
+          empresa_id: string | null
+          estado: string
+          id: string
+          mensaje_error: string | null
+          operacion: string
+          payload: Json | null
+          registro_id: string | null
+          tabla: string
+        }
+        Insert: {
+          created_at?: string
+          direccion: string
+          empresa_id?: string | null
+          estado?: string
+          id?: string
+          mensaje_error?: string | null
+          operacion: string
+          payload?: Json | null
+          registro_id?: string | null
+          tabla: string
+        }
+        Update: {
+          created_at?: string
+          direccion?: string
+          empresa_id?: string | null
+          estado?: string
+          id?: string
+          mensaje_error?: string | null
+          operacion?: string
+          payload?: Json | null
+          registro_id?: string | null
+          tabla?: string
+        }
+        Relationships: []
+      }
       trabajadores: {
         Row: {
           apellidos: string
